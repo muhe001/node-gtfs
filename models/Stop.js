@@ -14,10 +14,12 @@ var StopSchema = mongoose.Schema({
     type: String
   },
   stop_name: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   stop_desc: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   stop_lat: {
     type: Number

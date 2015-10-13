@@ -10,7 +10,8 @@ var AgencySchema = mongoose.Schema({
     type: String
   },
   agency_name: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   agency_url: {
     type: String

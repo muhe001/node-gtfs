@@ -7,7 +7,8 @@ var FeedInfoSchema = mongoose.Schema({
     index: true
   },
   feed_publisher_name: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   feed_publisher_url: {
     type: String

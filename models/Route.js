@@ -16,10 +16,12 @@ var RouteSchema = mongoose.Schema({
     type: String
   },
   route_long_name: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   route_desc: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   route_type: {
     type: String
