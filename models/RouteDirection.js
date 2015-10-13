@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var RouteDirection = mongoose.model('RouteDirection', new mongoose.Schema({
+var RouteDirectionSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -21,3 +22,15 @@ var RouteDirection = mongoose.model('RouteDirection', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    RouteDirectionSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('RouteDirection', RouteDirectionSchema);
+};

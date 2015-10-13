@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-var FeedInfo = mongoose.model('FeedInfo', new mongoose.Schema({
+var mongoosastic = require('mongoosastic');
+
+var FeedInfoSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -23,3 +25,15 @@ var FeedInfo = mongoose.model('FeedInfo', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+    
+    FeedInfoSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('FeedInfo', FeedInfoSchema);
+};

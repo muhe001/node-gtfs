@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var FareAttribute = mongoose.model('FareAttribute', new mongoose.Schema({
+var FareAttributeSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -24,3 +25,15 @@ var FareAttribute = mongoose.model('FareAttribute', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+    
+    FareAttributeSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('FareAttribute', FareAttributeSchema);
+};

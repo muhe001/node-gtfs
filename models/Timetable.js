@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Timetable = mongoose.model('Timetable', new mongoose.Schema({
+var TimetableSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -79,3 +80,15 @@ var Timetable = mongoose.model('Timetable', new mongoose.Schema({
     max: 1
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    TimetableSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Timetable', TimetableSchema);
+};

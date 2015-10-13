@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var utils = require('../lib/utils');
+var mongoosastic = require('mongoosastic');
 
-var StopTime = mongoose.model('StopTime', new mongoose.Schema({
+var StopTimeSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -42,3 +43,15 @@ var StopTime = mongoose.model('StopTime', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    StopTimeSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('StopTime', StopTimeSchema);
+};

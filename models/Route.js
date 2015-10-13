@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Route = mongoose.model('Route', new mongoose.Schema({
+var RouteSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -33,3 +34,15 @@ var Route = mongoose.model('Route', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+    
+    RouteSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Route', RouteSchema);
+};

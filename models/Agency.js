@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Agency = mongoose.model('Agency', new mongoose.Schema({
+var AgencySchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -44,3 +45,15 @@ var Agency = mongoose.model('Agency', new mongoose.Schema({
     type: Number
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    AgencySchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Agency', AgencySchema);
+};

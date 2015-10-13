@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Frequencies = mongoose.model('Frequencies', new mongoose.Schema({
+var FrequenciesSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -21,3 +22,15 @@ var Frequencies = mongoose.model('Frequencies', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+    
+    FrequenciesSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Frequencies', FrequenciesSchema);
+};

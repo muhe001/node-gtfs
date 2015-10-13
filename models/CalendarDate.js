@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var CalendarDate = mongoose.model('CalendarDate', new mongoose.Schema({
+var CalendarDateSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -17,3 +18,15 @@ var CalendarDate = mongoose.model('CalendarDate', new mongoose.Schema({
     max: 2
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    CalendarDateSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('CalendarDate', CalendarDateSchema);
+};

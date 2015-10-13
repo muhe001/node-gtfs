@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Transfer = mongoose.model('Transfer', new mongoose.Schema({
+var TransferSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -18,3 +19,15 @@ var Transfer = mongoose.model('Transfer', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    TransferSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Transfer', TransferSchema);
+};

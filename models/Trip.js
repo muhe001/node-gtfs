@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Trip = mongoose.model('Trip', new mongoose.Schema({
+var TripSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -35,3 +36,15 @@ var Trip = mongoose.model('Trip', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    TripSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Trip', TripSchema);
+};

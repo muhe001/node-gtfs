@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var FareRule = mongoose.model('FareRule', new mongoose.Schema({
+var FareRuleSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -21,3 +22,15 @@ var FareRule = mongoose.model('FareRule', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+    
+    FareRuleSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('FareRule', FareRuleSchema);
+};

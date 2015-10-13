@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Shape = mongoose.model('Shape', new mongoose.Schema({
+var ShapeSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -26,3 +27,15 @@ var Shape = mongoose.model('Shape', new mongoose.Schema({
     type: Number
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    ShapeSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Shape', ShapeSchema);
+};

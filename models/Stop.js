@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 
-var Stop = mongoose.model('Stop', new mongoose.Schema({
+var StopSchema = mongoose.Schema({
   agency_key: {
     type: String,
     index: true
@@ -44,3 +45,15 @@ var Stop = mongoose.model('Stop', new mongoose.Schema({
     type: String
   }
 }));
+
+module.exports = function (esClient) {
+  
+  if (esClient) {
+
+    StopSchema.plugin(mongoosastic, {
+      esClient: esClient
+    });
+  }
+
+  return mongoose.model('Stop', StopSchema);
+};
