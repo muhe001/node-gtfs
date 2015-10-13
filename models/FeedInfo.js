@@ -25,7 +25,7 @@ var FeedInfoSchema = mongoose.Schema({
   feed_version: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

@@ -45,7 +45,7 @@ var AgencySchema = mongoose.Schema({
   date_last_updated: {
     type: Number
   }
-}));
+});
 
 module.exports = function (esClient) {
   

@@ -50,7 +50,7 @@ var CalendarSchema = mongoose.Schema({
   end_date: {
     type: Number
   }
-}));
+});
 
 module.exports = function (esClient) {
   

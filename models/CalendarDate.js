@@ -17,7 +17,7 @@ var CalendarDateSchema = mongoose.Schema({
     min: 1,
     max: 2
   }
-}));
+});
 
 module.exports = function (esClient) {
   

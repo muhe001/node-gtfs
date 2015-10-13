@@ -79,7 +79,7 @@ var TimetableSchema = mongoose.Schema({
     min: 0,
     max: 1
   }
-}));
+});
 
 module.exports = function (esClient) {
   

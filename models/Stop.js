@@ -46,7 +46,7 @@ var StopSchema = mongoose.Schema({
   stop_timezone: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

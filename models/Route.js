@@ -35,7 +35,7 @@ var RouteSchema = mongoose.Schema({
   route_text_color: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

@@ -24,7 +24,7 @@ var FareAttributeSchema = mongoose.Schema({
   transfer_duration: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

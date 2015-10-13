@@ -18,7 +18,7 @@ var TransferSchema = mongoose.Schema({
   min_transfer_time: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

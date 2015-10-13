@@ -35,7 +35,7 @@ var TripSchema = mongoose.Schema({
   shape_id: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

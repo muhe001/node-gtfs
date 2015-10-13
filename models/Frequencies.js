@@ -21,7 +21,7 @@ var FrequenciesSchema = mongoose.Schema({
   exact_times: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

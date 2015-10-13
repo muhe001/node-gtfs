@@ -26,7 +26,7 @@ var ShapeSchema = mongoose.Schema({
   shape_dist_traveled: {
     type: Number
   }
-}));
+});
 
 module.exports = function (esClient) {
   

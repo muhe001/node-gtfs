@@ -21,7 +21,7 @@ var FareRuleSchema = mongoose.Schema({
   contains_id: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

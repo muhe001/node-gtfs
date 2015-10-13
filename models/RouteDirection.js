@@ -21,7 +21,7 @@ var RouteDirectionSchema = mongoose.Schema({
   direction_name: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   

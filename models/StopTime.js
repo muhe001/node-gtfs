@@ -42,7 +42,7 @@ var StopTimeSchema = mongoose.Schema({
   shape_dist_traveled: {
     type: String
   }
-}));
+});
 
 module.exports = function (esClient) {
   
