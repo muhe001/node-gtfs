@@ -3,12 +3,18 @@ var exec = require('child_process').exec;
 var csv = require('csv');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
 var path = require('path');
 var proj4 = require('proj4');
 var request = require('request');
 var unzip = require('unzip2');
 var q;
 
+var mongooseDb = mongoose.connect('mongodb://localhost:27017/gtfs');
+
+var elasticsearch = require('elasticsearch');
+
+var esClient = new elasticsearch.Client({host: 'http://localhost:9200'});
 
 // check if this file was invoked direct through command line or required as an export
 var invocation = (require.main === module) ? 'direct' : 'required';
@@ -32,51 +38,69 @@ if(invocation === 'direct') {
   }
 }
 
+/*
+ * Models are added to schemas with elasticsearch indexed properties es_indexed
+ * */
 var GTFSFiles = [{
   fileNameBase: 'agency',
-  collection: 'agencies'
+  collection: 'agencies',
+  model: require('../models/Agency')(esClient)
 }, {
   fileNameBase: 'calendar_dates',
-  collection: 'calendardates'
+  collection: 'calendardates',
+  model: null
 }, {
   fileNameBase: 'calendar',
-  collection: 'calendars'
+  collection: 'calendars',
+  model: null
 }, {
   fileNameBase: 'fare_attributes',
-  collection: 'fareattributes'
+  collection: 'fareattributes',
+  model: null
 }, {
   fileNameBase: 'fare_rules',
-  collection: 'farerules'
+  collection: 'farerules',
+  model: null
 }, {
   fileNameBase: 'feed_info',
-  collection: 'feedinfos'
+  collection: 'feedinfos',
+  model: require('../models/FeedInfo')(esClient)
 }, {
   fileNameBase: 'frequencies',
-  collection: 'frequencies'
+  collection: 'frequencies',
+  model: null
 }, {
   fileNameBase: 'routes',
-  collection: 'routes'
+  collection: 'routes',
+  model: require('../models/Route')(esClient)
 }, {
   fileNameBase: 'shapes',
-  collection: 'shapes'
+  collection: 'shapes',
+  model: null
 }, {
   fileNameBase: 'stop_times',
-  collection: 'stoptimes'
+  collection: 'stoptimes',
+  model: null
 }, {
   fileNameBase: 'stops',
-  collection: 'stops'
+  collection: 'stops',
+  model: require('../models/Stop')(esClient)
 }, {
   fileNameBase: 'transfers',
-  collection: 'transfers'
+  collection: 'transfers',
+  model: null
 }, {
   fileNameBase: 'trips',
-  collection: 'trips'
+  collection: 'trips',
+  model: null
 }, {
   fileNameBase: 'timetables',
-  collection: 'timetables'
+  collection: 'timetables',
+  model: null
 }, {
   fileNameBase: 'route_directions',
-  collection: 'routedirections'
+  collection: 'routedirections',
+  model: require('../models/RouteDirection')(esClient)
 }];
 
 
@@ -255,14 +279,30 @@ function main(config, callback) {
           }
 
           log(agency_key + ': Importing data - ' + GTFSFile.fileNameBase);
+
           db.collection(GTFSFile.collection, function (e, collection) {
+
             var input = fs.createReadStream(filepath);
             var parser = csv.parse({
               columns: true,
               relax: true
             });
+
+            var count = 0;
+            
+            console.log('loading ' + GTFSFile.collection + ':');
+
             parser.on('readable', function () {
+
+              
+              
               while(line = parser.read()) {
+
+                if (count % 1000 === 0 ) {
+                  process.stdout.write('.');
+                }
+                count++;
+
                 //remove null values
                 for(var key in line) {
                   if(line[key] === null) {
@@ -361,13 +401,25 @@ function main(config, callback) {
                   line.loc = [line.shape_pt_lon, line.shape_pt_lat];
                 }
 
-                //insert into db
-                collection.insert(line, function (e, inserted) {
-                  if(e) handleError(e);
-                });
+               
+
+                if (GTFSFile.model === null) {
+
+                   //insert into db
+                  collection.insert(line, function (e, inserted) {
+                    if(e) handleError(e);
+                  });
+                } else {
+
+                  var model = new GTFSFile.model(line);
+                  model.save(function (err) {
+                    if(err) handleError(err);
+                  });
+                }
               }
             });
             parser.on('end', function (count) {
+              console.log('.');
               cb();
             });
             parser.on('error', handleError);
