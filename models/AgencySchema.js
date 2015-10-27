@@ -47,6 +47,6 @@ var AgencySchema = mongoose.Schema({
   }
 });
 
-AgencySchema.plugin(AgencySchema);
+AgencySchema.plugin(mongoosastic);
 
 module.exports = AgencySchema;
