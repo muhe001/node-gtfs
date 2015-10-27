@@ -11,7 +11,8 @@ var StopSchema = mongoose.Schema({
     index: true
   },
   stop_code: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   stop_name: {
     type: String,
