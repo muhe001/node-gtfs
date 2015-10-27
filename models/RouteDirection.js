@@ -1,27 +1,7 @@
 var mongoose = require('mongoose');
 var mongoosastic = require('mongoosastic');
 
-var RouteDirectionSchema = mongoose.Schema({
-  agency_key: {
-    type: String,
-    index: true
-  },
-  route_id: {
-    type: String
-  },
-  route_name: {
-    type: String
-  },
-  direction_id: {
-    type: Number,
-    index: true,
-    min: 0,
-    max: 1
-  },
-  direction_name: {
-    type: String
-  }
-});
+var RouteDirectionSchema = mongoose.Schema(require('./_routeDirection.js'));
 
 module.exports = function (esClient) {
   

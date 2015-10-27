@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var mongoosastic = require('mongoosastic');
 
-var AgencySchema = require('./AgencySchema');
+var AgencySchema = mongoose.Schema(require('./_agency'));
 
 module.exports = function (esClient) {
   
